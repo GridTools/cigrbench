@@ -4,10 +4,10 @@
     "version": 1,
 
     // The name of the project being benchmarked
-    "project": "project",
+    "project": "cigrbench",
 
     // The project's homepage
-    "project_url": "http://project-homepage.org/",
+    "project_url": "https://gridtools.github.io/cigrbench",
 
     // The URL or local path of the source code repository for the
     // project being benchmarked
@@ -30,7 +30,7 @@
 
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "default" (for mercurial).
-    // "branches": ["master"], // for git
+    "branches": ["main"], // for git
     // "branches": ["default"],    // for mercurial
 
     // The DVCS being used.  If not set, it will be automatically
