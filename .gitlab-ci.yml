@@ -16,7 +16,7 @@ benchmark:
     - trying
   stage: benchmark
   script:
-    - mkdir ~/.ssh
+    - mkdir -p ~/.ssh
     - cp "$DEPLOY_PRIVATE_KEY" ~/.ssh/id_asv
     - chmod 600 ~/.ssh/id_asv
     - pip install asv
