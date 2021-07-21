@@ -27,9 +27,9 @@
     //     "python setup.py build",
     //     "PIP_NO_BUILD_ISOLATION=false python -mpip wheel --no-deps --no-index -w {build_cache_dir} {build_dir}"
     // ],
-    "install_command": [""],
-    "uninstall_command": [""],
-    "build_command": [""],
+    "install_command": ["echo 'dummy install'"],
+    "uninstall_command": ["echo 'dummy uninstall'"],
+    "build_command": ["echo 'dummy build'"],
 
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "default" (for mercurial).
