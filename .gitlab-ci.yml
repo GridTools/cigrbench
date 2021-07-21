@@ -21,6 +21,6 @@ benchmark:
     - chmod 600 ~/.ssh/id_asv
     - pip install asv virtualenv
     - cp ./daint-node.json $HOME/.asv-machine.json
-    - git checkout main && git pull
+    - git checkout main && git pull --ff-only
     - asv run --machine daint-compute-node --show-stderr --skip-existing
     - asv gh-pages
