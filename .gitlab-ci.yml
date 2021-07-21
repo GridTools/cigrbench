@@ -19,7 +19,7 @@ benchmark:
     - mkdir -p ~/.ssh
     - cp "$DEPLOY_PRIVATE_KEY" ~/.ssh/id_asv
     - chmod 600 ~/.ssh/id_asv
-    - pip install asv
+    - pip install asv virtualenv
     - cp ./daint-node.json $HOME/.asv-machine.json
     - asv run --machine daint-compute-node --show-stderr --skip-existing
     - asv gh-pages
