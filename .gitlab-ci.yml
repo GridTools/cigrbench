@@ -29,5 +29,5 @@ benchmark:
     - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_asv -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
     - git remote set-url --push origin git@github.com:GridTools/cigrbench.git
     - git fetch origin gh-pages
-    - git branch gh-pages origin/gh-pages
+    - git checkout origin/gh-pages .asv/results
     - asv gh-pages
