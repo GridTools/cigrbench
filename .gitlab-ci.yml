@@ -27,4 +27,5 @@ benchmark:
     - git config --global user.email $GITLAB_USER_EMAIL
     - git config --global user.name $GITLAB_USER_NAME
     - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_asv -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    - git remote set-url --push origin git@github.com:GridTools/cigrbench.git
     - asv gh-pages
