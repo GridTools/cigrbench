@@ -1,6 +1,8 @@
 # Write the benchmarking functions here.
 # See "Writing benchmarks" in the asv docs for more information.
 
+from package.module import naive_sum, std_sum, numpy_sum
+
 
 class TimeSuite:
     """
@@ -8,18 +10,16 @@ class TimeSuite:
     of iterating over dictionaries in Python.
     """
     def setup(self):
-        self.d = {}
-        for x in range(500):
-            self.d[x] = None
+        self.summands = list(range(10000))
 
-    def time_keys(self):
-        for key in self.d.keys():
-            pass
+    def time_naive(self):
+        sum = naive_sum(self.summands)
 
-    def time_range(self):
-        d = self.d
-        for key in range(500):
-            x = d[key]
+    def time_std(self):
+        sum = std_sum(self.summands)
+
+    def time_numpy(self):
+        sum = numpy_sum(self.summands)
 
 
 class MemSuite:
