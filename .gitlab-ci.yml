@@ -34,6 +34,6 @@ benchmark:
     - git fetch origin history || git branch origin/history
     - git checkout origin/history .asv/results || echo "no history"
     - asv run --machine daint-compute-node --show-stderr --skip-existing
-    - git add .asv/results && git commit -m "update history"
+    - git add -f .asv/results && git commit -m "update history"
     - git push origin main:history
     - asv gh-pages
