@@ -28,12 +28,13 @@ benchmark:
     - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_asv -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
     - git remote set-url origin git@github.com:GridTools/cigrbench.git
     - git remote set-url --push origin git@github.com:GridTools/cigrbench.git
-    - git checkout gh-pages
-    - git pull
     - git checkout main
     - git fetch origin history || git branch origin/history
     - git checkout origin/history .asv/results || echo "no history"
     - asv run --machine daint-compute-node --show-stderr --skip-existing
     - git add -f .asv/results && git commit -m "update history"
     - git push origin main:history
+    - git checkout gh-pages
+    - git pull
+    - git checkout history
     - asv gh-pages
