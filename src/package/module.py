@@ -1,4 +1,4 @@
-import numpy as np
+#  import numpy as np
 
 
 def naive_sum(summands):
@@ -13,4 +13,5 @@ def std_sum(summands):
 
 
 def numpy_sum(summands):
-    return np.sum(summands)
+    #  return np.sum(summands)
+    return "skipped to not require numpy"
