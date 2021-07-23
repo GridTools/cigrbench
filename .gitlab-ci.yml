@@ -5,8 +5,8 @@ stages:
   - benchmark
 
 benchmark:
-  #extends: [".daint"]
-  tags: ["kubernetes"]
+  extends: [".daint"]
+  # tags: ["kubernetes"]
   image: dropd/asv-upload-history:latest
   variables:
     PULL_IMAGE: "YES"
