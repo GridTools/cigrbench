@@ -32,7 +32,7 @@ class ComparisonSuite:
     param_names = ("method")
 
     def setup(self, method):
-        self.summands = [random.random() for i in range(1000000)]
+        self.summands = [random.normalvariate(421, 10000) for i in range(1000000)]
 
     def time_sums(self, method):
         result = method(self.summands)
