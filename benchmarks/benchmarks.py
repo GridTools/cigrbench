@@ -13,13 +13,27 @@ class TimeSuite:
         self.summands = list(range(10000))
 
     def time_naive(self):
-        sum = naive_sum(self.summands)
+        result = naive_sum(self.summands)
 
     def time_std(self):
-        sum = std_sum(self.summands)
+        result = std_sum(self.summands)
 
     def time_numpy(self):
-        sum = numpy_sum(self.summands)
+        result = numpy_sum(self.summands)
+
+
+class ComparisonSuite:
+    """
+    An example comparing the timings of different functions with the same inputs.
+    """
+    params = ([naive_sum, std_sum, numpy_sum])
+    param_names = ("method")
+
+    def setup(self, method):
+        self.summands = [random.random() for i in range(1e7)]
+
+    def compare_sums(self, method):
+        result = method(self.summands)
 
 
 class MemSuite:
