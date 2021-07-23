@@ -28,14 +28,15 @@ class ComparisonSuite:
     """
     An example comparing the timings of different functions with the same inputs.
     """
-    params = ([naive_sum, std_sum, numpy_sum])
-    param_names = ("method")
+    methods = {"naive": naive_sum, "std": std_sum, "numpy": numpy_sum}
+    params = (["naive", "std", "numpy"])
+    param_names = ("method", )
 
     def setup(self, method):
         self.summands = [random.normalvariate(421, 10000) for i in range(1000000)]
 
     def time_sums(self, method):
-        result = method(self.summands)
+        result = self.methods[method](self.summands)
 
 
 class MemSuite:
