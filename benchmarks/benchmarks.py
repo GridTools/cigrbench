@@ -1,6 +1,8 @@
 # Write the benchmarking functions here.
 # See "Writing benchmarks" in the asv docs for more information.
 
+import random
+
 from package.module import naive_sum, std_sum, numpy_sum
 
 
@@ -30,9 +32,9 @@ class ComparisonSuite:
     param_names = ("method")
 
     def setup(self, method):
-        self.summands = [random.random() for i in range(1e7)]
+        self.summands = [random.random() for i in range(1000000)]
 
-    def compare_sums(self, method):
+    def time_sums(self, method):
         result = method(self.summands)
 
 
