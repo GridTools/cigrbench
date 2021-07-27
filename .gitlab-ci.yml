@@ -12,6 +12,7 @@ variables:
 
 .github_push_setup:
   before_script:
+    # setting origin to github and enabling up push access
     - mkdir -p ~/.ssh
     - cp "$DEPLOY_PRIVATE_KEY" ~/.ssh/id_asv
     - chmod 600 ~/.ssh/id_asv
@@ -21,8 +22,6 @@ variables:
     - git remote set-url origin git@github.com:${GITHUB_PATH}
     - git remote set-url --push origin git@github.com:${GITHUB_PATH}
     - git fetch
-    - git checkout gh-pages && git pull && git checkout -
-    - pip install asv virtualenv
 
 benchmark:
   extends: [".daint"]
@@ -36,15 +35,20 @@ benchmark:
     - trying
   stage: benchmark
   before_script:
+    # remove cached remote / branch if they exist
     - git remote remove gh || echo "remote not initialized"
     - git branch -D gh/history || echo "branch did not exist yet"
   script:
-    - pip install asv virtualenv
+    # get or initialize the history branch from github
     - cp ./daint-node.json $HOME/.asv-machine.json
     - git remote add gh https://github.com/${GITHUB_PATH}
-    - git fetch gh history || git branch gh/history  # we fetch or create the history branch from github
+    - git fetch gh history || git branch gh/history
+    # put history in current directory to add the current run to it
     - git checkout gh/history .asv || echo "no history"  # get the history if it exists
+    # install and run asv for benchmarks
+    - pip install asv virtualenv
     - asv run --machine daint-compute-node --show-stderr --skip-existing
+    # store the results as artifact
     - cp -r .asv $CI_PROJECT_DIR/results  # artifacts must be in the project dir
   artifacts:
     when: always
@@ -63,10 +67,16 @@ publish:
     - job: "benchmark"
       artifacts: true
   script:
+    # making sure gh-pages branch is up to date with github
+    - git checkout gh-pages && git pull && git checkout -
     - git checkout history
-    - cp -r results .asv  # copy the results artifact from the benchmark job to where asv recognizes it
-    - git add -f .asv && git commit -m "update history"  # push it to history, -f because ignored by .gitignore
+    # getting results from artifacts & pushing to history
+    - cp -r results .asv
+    - git add -f .asv && git commit -m "update history"  # -f because .asv is ignored by .gitignore
     - git push
+    # get back to the main branch and put the results back
     - git checkout -
     - git checkout history .asv
+    # intall and run asv to publish
+    - pip install asv virtualenv
     - asv gh-pages  # publish all results to github pages
