@@ -33,11 +33,14 @@ benchmark:
     - main
     - trying
   stage: benchmark
+  before_script:
+    - git remote remove gh || echo "remote not initiated"
+    - git branch -D gh/history
   script:
     - pip install asv virtualenv
     - cp ./daint-node.json $HOME/.asv-machine.json
-    - git remote add gh https://github.com/${GITHUB_PATH} || echo "remote cached"
-    - git fetch gh history || git branch gh/history || echo "branch exists"  # we fetch or create the history branch from github
+    - git remote add gh https://github.com/${GITHUB_PATH}
+    - git fetch gh history || git branch gh/history  # we fetch or create the history branch from github
     - git checkout gh/history .asv || echo "no history"  # get the history if it exists
     - asv run --machine daint-compute-node --show-stderr --skip-existing
     - cp -r .asv $CI_PROJECT_DIR/results  # artifacts must be in the project dir
