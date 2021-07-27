@@ -69,10 +69,11 @@ publish:
       artifacts: true
   script:
     # making sure gh-pages branch is up to date with github
+    - git checkout -b main
     - git checkout gh-pages && git pull && git checkout -
     - git checkout history
     # getting results from artifacts & pushing to history
-    - cp -r results .asv
+    - cp -r results/ .asv
     - git add -f .asv && git commit -m "update history"  # -f because .asv is ignored by .gitignore
     - git push
     # get back to the main branch and put the results back
