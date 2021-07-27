@@ -12,5 +12,7 @@
     - bors config
     - github action to push to the mirror on pushes to the benchmarked branches
 4) Create a read/write deploy key on the main repo, add the secret key as a file variable on the CIGR mirror
-5) create a `.gitlab-ci.yml` as you would for any CIGR with a benchmarking job
-    - the job's docker image must contain python as well as git
+5) create a `.gitlab-ci.yml` as you would for any CIGR with a benchmarking job and a publishing job
+    - The benchmarking job will run on sarus on daint and can not push to github. It provides the results as an artifact.
+    - The publishing job's docker image must contain python as well as git, it will push the history and update the github pages branch.
+6) create the daint-node.json to specify the type of node you run on on daint.

@@ -3,11 +3,28 @@ include:
 
 stages:
   - benchmark
+  - publish
+
+variables:
+  UPLOAD_IMAGE: dropd/asv-upload-history:latest
+  BENCHMARK_IMAGE: dropd/asv-upload-history:latest
+  GITHUB_PATH: GridTools/cigrbench.git
+
+.github_push_setup:
+  before_script:
+    - mkdir -p ~/.ssh
+    - cp "$DEPLOY_PRIVATE_KEY" ~/.ssh/id_asv
+    - chmod 600 ~/.ssh/id_asv
+    - git config --global user.email $GITLAB_USER_EMAIL
+    - git config --global user.name $GITLAB_USER_NAME
+    - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_asv -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
+    - git remote set-url origin git@github.com:${GITHUB_PATH}
+    - git remote set-url --push origin git@github.com:${GITHUB_PATH}
+    - git fetch
 
 benchmark:
-  # extends: [".daint"]
-  tags: ["kubernetes"]
-  image: dropd/asv-upload-history:latest
+  extends: [".daint"]
+  image: $BENCHMARK_IMAGE
   variables:
     PULL_IMAGE: "YES"
     SLURM_JOB_NUM_NODES: 1
@@ -17,24 +34,32 @@ benchmark:
     - trying
   stage: benchmark
   script:
-    - mkdir -p ~/.ssh
-    - cp "$DEPLOY_PRIVATE_KEY" ~/.ssh/id_asv
-    - chmod 600 ~/.ssh/id_asv
     - pip install asv virtualenv
     - cp ./daint-node.json $HOME/.asv-machine.json
-    - git checkout main && git pull --ff-only
-    - git config --global user.email $GITLAB_USER_EMAIL
-    - git config --global user.name $GITLAB_USER_NAME
-    - export GIT_SSH_COMMAND="ssh -i ~/.ssh/id_asv -o IdentitiesOnly=yes -o StrictHostKeyChecking=no"
-    - git remote set-url origin git@github.com:GridTools/cigrbench.git
-    - git remote set-url --push origin git@github.com:GridTools/cigrbench.git
-    - git checkout gh-pages
-    - git pull
-    - git checkout main
-    - git fetch origin history || git branch origin/history
-    - git checkout origin/history .asv/results || echo "no history"
+    - git remote add gh github.com/${GITHUB_PATH}
+    - git fetch gh history || git branch gh/history  # we fetch or create the history branch from github
+    - git checkout gh/history .asv || echo "no history"  # get the history if it exists
     - asv run --machine daint-compute-node --show-stderr --skip-existing
-    - git add -f .asv/results && git commit -m "update history"
-    - git merge -s recursive -Xours origin/history
-    - git push origin main:history
+    - cp -r .asv $CI_PROJECT_DIR/results  # artifacts must be in the project dir
+  artifacts:
+    when: always
+    paths:
+      - results/
+
+publish:
+  extends: [".github_push_setup"]
+  tags: ["kubernetes"]
+  image: UPLOAD_IMAGE
+  only:
+    - main
+    - trying
+  stage: publish
+  needs:
+    - job: "benchmark"
+      artifacts: true
+  script:
+    - git checkout history
+    - cp -r ~/results .asv
+    - git add -f .asv && git commit -m "update history"
+    - git push
     - asv gh-pages
