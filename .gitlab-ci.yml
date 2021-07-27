@@ -71,7 +71,7 @@ publish:
     # making sure gh-pages branch is up to date with github
     - git checkout -b main
     - git checkout gh-pages && git pull && git checkout -
-    - git checkout history
+    - git checkout history || (git checkout -b history && mkdir -p .asv/results)
     # getting results from artifacts & pushing to history
     - cp -r results/ .asv/results  # the `/` on `results/` is crucial to copy the contents not the dir as a whole
     - git add -f .asv/results && git commit -m "update history"  # -f because .asv is ignored by .gitignore
