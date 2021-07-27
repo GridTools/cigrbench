@@ -21,6 +21,7 @@ variables:
     - git remote set-url origin git@github.com:${GITHUB_PATH}
     - git remote set-url --push origin git@github.com:${GITHUB_PATH}
     - git fetch
+    - git checkout gh-pages && git pull && git checkout -
     - pip install asv virtualenv
 
 benchmark:
@@ -66,6 +67,6 @@ publish:
     - cp -r results .asv  # copy the results artifact from the benchmark job to where asv recognizes it
     - git add -f .asv && git commit -m "update history"  # push it to history, -f because ignored by .gitignore
     - git push
-    - git checkout main
+    - git checkout -
     - git checkout history .asv
     - asv gh-pages  # publish all results to github pages
