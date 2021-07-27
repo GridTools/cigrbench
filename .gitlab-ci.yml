@@ -62,7 +62,7 @@ publish:
       artifacts: true
   script:
     - git checkout history
-    - cp -r ~/results .asv
+    - cp -r results .asv
     - git add -f .asv && git commit -m "update history"
     - git push
     - asv gh-pages
