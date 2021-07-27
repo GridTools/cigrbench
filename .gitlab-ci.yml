@@ -40,6 +40,7 @@ benchmark:
     - git branch -D gh/history || echo "branch did not exist yet"
   script:
     # get or initialize the history branch from github
+    - mkdir $HOME
     - cp ./daint-node.json $HOME/.asv-machine.json
     - git remote add gh https://github.com/${GITHUB_PATH}
     - git fetch gh history || git branch gh/history
