@@ -21,6 +21,7 @@ variables:
     - git remote set-url origin git@github.com:${GITHUB_PATH}
     - git remote set-url --push origin git@github.com:${GITHUB_PATH}
     - git fetch
+    - pip install asv virtualenv
 
 benchmark:
   extends: [".daint"]
