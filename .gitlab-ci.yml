@@ -50,7 +50,7 @@ benchmark:
     - pip install asv virtualenv
     - asv run --machine daint-compute-node --show-stderr --skip-existing
     # store the results as artifact
-    - cp -r .asv $CI_PROJECT_DIR/results  # artifacts must be in the project dir
+    - cp -r .asv/results $CI_PROJECT_DIR/results  # artifacts must be in the project dir
   artifacts:
     when: always
     paths:
@@ -73,8 +73,8 @@ publish:
     - git checkout gh-pages && git pull && git checkout -
     - git checkout history
     # getting results from artifacts & pushing to history
-    - cp -r results/ .asv  # the `/` on `results/` is crucial to copy the contents not the dir as a whole
-    - git add -f .asv && git commit -m "update history"  # -f because .asv is ignored by .gitignore
+    - cp -r results/ .asv/results  # the `/` on `results/` is crucial to copy the contents not the dir as a whole
+    - git add -f .asv/results && git commit -m "update history"  # -f because .asv is ignored by .gitignore
     - git push
     # get back to the main branch and put the results back
     - git checkout -
