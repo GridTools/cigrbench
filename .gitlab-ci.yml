@@ -49,7 +49,7 @@ benchmark:
 publish:
   extends: [".github_push_setup"]
   tags: ["kubernetes"]
-  image: UPLOAD_IMAGE
+  image: $UPLOAD_IMAGE
   only:
     - main
     - trying
