@@ -40,7 +40,7 @@ benchmark:
     - git branch -D gh/history || echo "branch did not exist yet"
   script:
     # get or initialize the history branch from github
-    - mkdir -p $HOME
+    - mkdir -p $HOME  # on sarus the home dir sometimes does not exist...
     - cp ./daint-node.json $HOME/.asv-machine.json
     - git remote add gh https://github.com/${GITHUB_PATH}
     - git fetch gh history || git branch gh/history
@@ -73,7 +73,7 @@ publish:
     - git checkout gh-pages && git pull && git checkout -
     - git checkout history
     # getting results from artifacts & pushing to history
-    - cp -r results/ .asv
+    - cp -r results/ .asv  # the `/` on `results/` is crucial to copy the contents not the dir as a whole
     - git add -f .asv && git commit -m "update history"  # -f because .asv is ignored by .gitignore
     - git push
     # get back to the main branch and put the results back
