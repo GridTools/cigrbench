@@ -34,8 +34,8 @@ benchmark:
     - trying
   stage: benchmark
   before_script:
-    - git remote remove gh || echo "remote not initiated"
-    - git branch -D gh/history
+    - git remote remove gh || echo "remote not initialized"
+    - git branch -D gh/history || echo "branch did not exist yet"
   script:
     - pip install asv virtualenv
     - cp ./daint-node.json $HOME/.asv-machine.json
@@ -47,7 +47,7 @@ benchmark:
   artifacts:
     when: always
     paths:
-      - results/
+      - results/  # this will make the `results` folder available on the default work dir of the upload script
 
 publish:
   extends: [".github_push_setup"]
@@ -62,7 +62,7 @@ publish:
       artifacts: true
   script:
     - git checkout history
-    - cp -r results .asv
-    - git add -f .asv && git commit -m "update history"
+    - cp -r results .asv  # copy the results artifact from the benchmark job to where asv recognizes it
+    - git add -f .asv && git commit -m "update history"  # push it to history, -f because ignored by .gitignore
     - git push
-    - asv gh-pages
+    - asv gh-pages  # publish all results to github pages
