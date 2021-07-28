@@ -75,8 +75,8 @@ publish:
     # getting results from artifacts & pushing to history
     - mv results ~/results
     - cp -r ~/results/* .asv/results/  # the `/*` on `results/*` is crucial to copy the contents not the dir as a whole
-    - git add -f .asv/results && git commit -m "update history"  # -f because .asv is ignored by .gitignore
-    - git push -u origin history
+    - git add -f .asv/results  # -f because .asv is ignored by .gitignore
+    - git diff --cached --exit-code || (git commit -m "update history" && git push -u origin history)
     # get back to the main branch and put the results back
     - git checkout -
     - git checkout history .asv
