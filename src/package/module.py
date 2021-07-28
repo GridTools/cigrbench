@@ -4,7 +4,7 @@ from time import sleep
 
 def naive_sum(summands):
     #deliberately slowing down
-    sleep(0.20)
+    sleep(0.10)
     sum = 0
     for summand in summands:
         sum += summand
