@@ -39,7 +39,9 @@ benchmark:
     - git remote remove gh || echo "remote not initialized"
     - git branch -D gh/history || echo "branch did not exist yet"
   script:
-    - git pull  # on daint it seems that it doesn't always use the latest commit
+    # the daint runner sometimes fails to checkout the current commit, wtf?
+    - git checkout main
+    - git pull
     # get or initialize the history branch from github
     - mkdir -p $HOME  # on sarus the home dir sometimes does not exist...
     - cp ./daint-node.json $HOME/.asv-machine.json
